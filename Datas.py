@@ -29,6 +29,10 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 ORANGE = (255, 151, 23)
 
+#     ALL FONTS
+# - Using variables for a callable font for applying it to the gui
+ORBITRONIO = "Assets/Fonts/Orbitronio.ttf"
+
 #      GUI CLASS 
 #region GUI Functions
 class GUICreator():

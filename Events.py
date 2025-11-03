@@ -24,7 +24,7 @@ def screens_updating():
     screen_handler = {
         "SCRN_MENU": drawing_menu,
         "SCRN_LEVEL": drawing_Level,
-        "SCRN_GAME": drawing_menu,
+        "SCRN_GAME": drawing_gameplay,
         "SCRN_OVER": drawing_menu
     }
 
@@ -45,7 +45,7 @@ def drawing_menu():
     screen.fill((0, 0, 0)) # Clearing the screen 
 
     #      (DRAWING TEXT ON SCREEN)
-    UI.draw_text("IntellaShooters", 600, 105, 90, WHITE, "Assets/Fonts/Orbitronio.ttf")
+    UI.draw_text("IntellaShooters", 600, 105, 90, WHITE, ORBITRONIO)
 
     #      (MAKING BUTTONS VISIBLE)
     for button in [BTN_MENU_START]:
@@ -54,11 +54,60 @@ def drawing_menu():
 
 #     LEVELS SCREEN 
 def drawing_Level(): 
+    global GAME_EVENTS
     # - A function for drawing the menu for the game
     screen.fill((0, 0, 0))
 
     #     (DRAWIGN TEXT ON SCREEN)
-    UI.draw_text("SELECT DIFFICULTY", 600, 105, 55, WHITE, "Assets/Fonts/Orbitronio.ttf")
+    UI.draw_text("SELECT DIFFICULTY", 600, 75, 55, WHITE, ORBITRONIO)
+
+    #     (UPDATING PLAYER MOVMENT)
+    keys = pygame.key.get_pressed()
+    player.movement(keys)
+
+    #     (DRAWING PLAYER)
+    player.draw(screen)
+
+    #     (DRAWING BOXES)
+    # - Setting out the Rect for collision detection
+    rect_easy = pygame.Rect(500, 140, 200, 100)
+    rect_normal = pygame.Rect(500, 300, 200, 100)
+    rect_hard = pygame.Rect(500, 460, 200, 100)
+
+    # - Drawing boxes for the options for level of difficult
+    pygame.draw.rect(screen, BLUE, rect_easy)
+    pygame.draw.rect(screen, BLUE, rect_normal)
+    pygame.draw.rect(screen, BLUE, rect_hard)
+
+    #     (DRAWING LABELS)
+    UI.draw_text("EASY", rect_easy.centerx, rect_easy.centery, 35, WHITE, ORBITRONIO)
+    UI.draw_text("NORM", rect_normal.centerx, rect_normal.centery, 35, WHITE, ORBITRONIO)
+    UI.draw_text("HARD", rect_hard.centerx, rect_hard.centery, 35, WHITE, ORBITRONIO)
+
+    #     (CHECKING COLLISIONS)
+    # - Checking if player projectiles has collided with the boxes
+    for Proj in player.projectiles:
+
+        #     [HITTING THE EASY BOX]
+        if Proj.rect.colliderect(rect_easy): # If it collides with the easy box
+            GAME_EVENTS = "SCRN_GAME"        # Changes the game state to active gameplay
+            Proj.kill()                      # Remoes the projectiles after hit
+            break                            # Stops checking
+        
+        #     [HITTING THE NORMAL BOX]
+        elif Proj.rect.colliderect(rect_normal): # If it collides with the easy box
+            GAME_EVENTS = "SCRN_GAME"            # Changes the game state to active gameplay
+            Proj.kill()                          # Remoes the projectiles after hit
+            break                                #  Stops checking
+        
+        #     [HITTING THE HARD BOX]
+        elif Proj.rect.colliderect(rect_hard): # If it collides with the easy box
+            GAME_EVENTS = "SCRN_GAME"            # Changes the game state to active gameplay
+            Proj.kill()                          # Remoes the projectiles after hit
+            break                                #  Stops checking
+#     LEVELS SCREEN 
+def drawing_gameplay():
+    screen.fill((0, 0, 0)) 
 
     #     (UPDATING PLAYER MOVMENT)
     keys = pygame.key.get_pressed()
