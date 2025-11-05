@@ -14,11 +14,18 @@ clock = pygame.time.Clock()
 FPS = 60
 
 #      WINDOW PROPERTIES
-UPDATE_LOG = ' 0.0.1'     # Logs of current game version for verison control
+UPDATE_LOG = ' 0.0.2'     # Logs of current game version for verison control
 GAME_EVENTS = "SCRN_MENU" # Holding game events as a referenced variable 
+GAMEPLAY_MODE = "NORM"    # Holding difficultly level as referebced variable
 
 WIDTH, HEIGHT = 1200, 600                         # Determining the measurements of the screen size
 screen = pygame.display.set_mode((WIDTH, HEIGHT)) # Applying those measurements to make the screen dimensions
+
+#      TIMER SETTING
+# - Creating timer variables for duration how long a user can answer a question
+MAX_TIMER = 60           # Default total time (in seconds)
+CURRENT_TIME = MAX_TIMER # Duration time
+ACTIVE_TIMER = True      # Determining if the timer should run or not
 
 #      ALL COLOURS
 # - Using variables to have callable colour for applying to the gui
@@ -28,10 +35,13 @@ WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 ORANGE = (255, 151, 23)
+RED = (252, 43, 57)
 
 #     ALL FONTS
 # - Using variables for a callable font for applying it to the gui
 ORBITRONIO = "Assets/Fonts/Orbitronio.ttf"
+BATMAN = "Assets/Fonts/batmfa__.otf"
+SPACELINE = "Assets/Fonts/Spaceline.ttf"
 
 #      GUI CLASS 
 #region GUI Functions
@@ -46,12 +56,12 @@ class GUICreator():
         text_rect = text_surface.get_rect(center=(x, y))   # Positioning the text at the given X|Y coordinates
         self.surface.blit(text_surface, text_rect)         # Drawing the text on the screen
 
-    def draw_bars(self, amount, max_amount, x, y, br_colour):
+    def draw_bars(self, amount, max_amount, x, y, br_colour, width=400, height=30):
         # - A function for drawing bars for either player health indication or etc
         ratio = amount / max_amount
-        pygame.draw.rect(self.surface, WHITE, (x - 2, y - 2, 404, 34))     # White bars surrounding the bar
-        pygame.draw.rect(self.surface, BLACK, (x, y, 400, 30))             # The intial size of the bar
-        pygame.draw.rect(self.surface, br_colour, (x, y, 400 * ratio, 30)) # The changeable bar depending what it used for
+        pygame.draw.rect(self.surface, WHITE, (x - 2, y - 2, width+4, height+4)) # White bars surrounding the bar
+        pygame.draw.rect(self.surface, BLACK, (x, y, width, height))             # The intial size of the bar
+        pygame.draw.rect(self.surface, br_colour, (x, y, width * ratio, height)) # The changeable bar depending what it used for
 
 #      (SETTING UP GUI VARIABLE)
 UI = GUICreator(screen) # Will be kept as a reference when wanting to draw certain GUI elements
@@ -126,4 +136,25 @@ BTN_MENU_START = ButtonFunc(BTN_MENU_surface, 600, 460, "START", BTN_MENULIT_sur
 
 #region Player 
 player = Player(x=100, y=400, speed =5, screen_height=HEIGHT)
+#endregion
+
+#      QUESTION SETUP + DATA
+#region Question Data
+RESULT_STATE = "Unknown"
+CURRENT_QUESTION = None
+
+QUESTIONS_LIST = [
+    {
+        "question": "Is Thomas cool?",
+        "answers": [("YES", "CORRECT"), ("NO", "INCORRECT")]
+    },
+    {
+        "question": "Is Python a snake or a language",
+        "answers": [("Language", "INCORRECT"), ("Snake", "CORRECT")]
+    },
+    {
+        "question": "Is water wet?",
+        "answers": [("NO", "CORRECT"), ("YES", "INCORRECT")]
+    },
+]
 #endregion

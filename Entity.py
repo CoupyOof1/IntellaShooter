@@ -9,6 +9,9 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, speed, screen_height):
         super().__init__() # Intialising the class
 
+        #      (PLAYER HEALTH)
+        # - Creating a health sytem for the player 
+
         #      (PLAYER VISUALS)
         # - For now, creating a simple rectangle (50x50 pixels) for representing the player
         self.image = pygame.Surface((50, 50)) # Creating the rectangle by 50x50 pixels
